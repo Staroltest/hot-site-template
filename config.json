@@ -202,7 +202,18 @@
     "tagline": "示例 tagline：换成你自己的一句话。",
     "tagline_en": "Example tagline: replace it with your own one-liner.",
     "timezone": "Asia/Shanghai",
-    "tips": [],
+    "tips": [
+      {
+        "address": "TBH8fAi6Vbr9G4VW3PDm3DugZU6fknr6na",
+        "image": "assets/tip-usdt.png",
+        "label": "USDT · TRC20"
+      },
+      {
+        "address": "7pitxN5xECR2NH2qdhFiSRC3fDdMsmVczqFSY4Zz4v5H",
+        "image": "assets/tip-usdt-sol.png",
+        "label": "USDT · Solana"
+      }
+    ],
     "title": "HOT 热点",
     "title_en": "HOT News",
     "url": "https://EXAMPLE.github.io/REPO",

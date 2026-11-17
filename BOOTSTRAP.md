@@ -59,9 +59,10 @@ cd {{WORK_DIR}} && rm -rf tools/__pycache__ data/store.json data/zh_draft.json
   token 填进来，重新生成一次后全站每页 `</body>` 前自动注入统计代码
   （留空时不输出任何统计代码）。详见第 7 节。
 - `site.footer_note`：页脚第二段（署名/出处链，纯文本）。
-- `site.tips`：赞赏码列表，默认为空；用户给了码再加
-  `[{"label": "USDT · TRC20", "image": "assets/tip-xxx.png", "address": "..."}]`，
-  图片放 `assets/`。
+- `site.tips`：赞赏码列表，模板默认自带 Camille 的两个码（USDT TRC20 /
+  Solana，二维码图片在 `assets/`）；新站直接沿用即可，换收款码时把新图片
+  放进 `assets/` 并改 `label` / `image` / `address` 三项，不想要赞赏码的站
+  把列表清空为 `[]`。
 - `site.about_blocks`：关于页各段 `[{"h": "标题", "paras": ["段落", ...]}]`，
   至少含定位、怎么做、制作人；段落里可用 `<code>`、`<a>`。
 - 双语键（英文树用，只加键、不改结构，全填英文）：
