@@ -2469,10 +2469,25 @@ def page_open(site, active, title, description, prefix="", base="", canonical=""
             f'<div class="main">{topbar_html(site, active, prefix, base, lang, alt_href)}<div class="page{page_cls}">')
 
 
+def analytics_beacon(site):
+    """Cloudflare Web Analytics beacon；site.web_analytics_token 为空时不输出。
+
+    token 由 Cloudflare 后台 Web Analytics 里该站点的 beacon 代码中取，
+    填进 config.json 后全站每页 </body> 前自动注入（与 indie-game-hot、
+    ecommerce-hot 的格式一致）。"""
+    token = site.get("web_analytics_token", "")
+    if not token:
+        return ""
+    return (f"<!-- Cloudflare Web Analytics --><script type='module' "
+            f"src='https://static.cloudflareinsights.com/beacon.min.js' "
+            f"data-cf-beacon='{{\"token\": \"{token}\"}}'></script>"
+            f"<!-- End Cloudflare Web Analytics -->")
+
+
 def page_close(site, active, prefix="", base="", lang="zh"):
     to_top = (f'<button type="button" class="to-top" id="toTop" aria-label="{_L(lang, "回到顶部", "Back to top")}">'
               f'{icon("arrow-up", 18)}</button>')
-    return (f"{footer_html(site, base, lang)}</div></div></div>{to_top}{tabbar_html(active, prefix, base, lang)}<script src='{base}assets/site.js'></script></body></html>\n")
+    return (f"{footer_html(site, base, lang)}</div></div></div>{to_top}{tabbar_html(active, prefix, base, lang)}<script src='{base}assets/site.js'></script>{analytics_beacon(site)}</body></html>\n")
 
 
 def day_header(d, items, today, aside=False, lang="zh"):
@@ -3402,7 +3417,7 @@ def render_404(site):
             f'<div class="empty-actions">'
             f'<a class="empty-btn primary" href="{site_url}/index.html">回首页</a>'
             f'<a class="empty-btn" href="{site_url}/hot.html">去看热点榜</a>'
-            f'</div></div></div></div></div></div>{boot_404}</body></html>\n')
+            f'</div></div></div></div></div></div>{boot_404}{analytics_beacon(site)}</body></html>\n')
 
 
 def render_hot(site, hot, generated_at, counts, cfg, lang="zh"):

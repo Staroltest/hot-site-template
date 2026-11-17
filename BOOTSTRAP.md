@@ -54,6 +54,10 @@ cd {{WORK_DIR}} && rm -rf tools/__pycache__ data/store.json data/zh_draft.json
 - `site.mirror_url`：镜像站根地址（例如 `https://{{CF_PROJECT}}.pages.dev`），
   先留空，镜像部署成功后再填；留空时 robots.txt 与 llms.txt 不写镜像行、
   geo-audit 里镜像检查记为“未配置”。
+- `site.web_analytics_token`：Cloudflare Web Analytics 的 beacon token，先留空；
+  镜像部署成功后在 Cloudflare 后台给该站点开 Web Analytics，把 beacon 代码里的
+  token 填进来，重新生成一次后全站每页 `</body>` 前自动注入统计代码
+  （留空时不输出任何统计代码）。详见第 7 节。
 - `site.footer_note`：页脚第二段（署名/出处链，纯文本）。
 - `site.tips`：赞赏码列表，默认为空；用户给了码再加
   `[{"label": "USDT · TRC20", "image": "assets/tip-xxx.png", "address": "..."}]`，
@@ -144,6 +148,12 @@ python3 ~/workspace/custom-connectors/custom.cloudflare/bin/cf.py deploy \
   作为 worker 附加上（助手已支持），`_routes.json` 同理。
 - 部署成功后抽查：`https://{{CF_PROJECT}}.pages.dev/` 200 且页头时间当前；
   填好 `site.mcp_url` 重新生成并重新部署一次，让关于页与页脚出现 MCP 入口。
+- 开 Cloudflare Web Analytics：Cloudflare 后台 → Web Analytics → 给该 Pages
+  站点添加站点，把生成的 beacon 代码里的 token 填进 `config.json` 的
+  `site.web_analytics_token`，重新生成并重新部署一次；抽查首页与一条详情页，
+  `</body>` 前应有 `<!-- Cloudflare Web Analytics -->` 代码段。看数路径：
+  后台 Workers & Pages → 该项目 → Metrics/Analytics；刚开时为空正常，
+  等真实访问进来才有数字。
 - 然后实测 MCP：POST `/mcp` 做 initialize、tools/list、三次 tools/call
   （get_hot / get_daily / search_items）全部成功，再加一次 `lang=en` 调用
   （返回英文标题/简介且带 `lang: "en"` 字段），且首页与 `/data/hot.json` 仍 200。
